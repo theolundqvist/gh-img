@@ -11,7 +11,7 @@
 
 Because GitHub asset URLs inherit the repository's visibility, an image uploaded against a private repo **stays private** — it renders inline for anyone with repo access and 404s for everyone else.
 
-- **Made for agents.** Ships with an [`AGENTS.md`](AGENTS.md) and a Claude Code skill; the output is one markdown line ready to paste into a PR body or comment.
+- **Made for agents.** Ships with an [`AGENTS.md`](AGENTS.md) and a [Claude Code skill](skills/pr-screenshot); the output is one markdown line ready to paste into a PR body or comment.
 - **Zero third-party dependencies.** Pure Go standard library — `go.mod` has no `require` block. The only externals are the macOS `security` and `sqlite3` binaries that already ship with the OS.
 - **Safe and easily verifiable.** A few hundred lines you can read end-to-end in one sitting. The session cookie is used only against `github.com` and GitHub's own upload storage — never written to disk, never logged, never sent anywhere else.
 - **Private by default.** Images inherit repo visibility; a private repo's screenshots 404 for anyone without access.
@@ -85,6 +85,19 @@ The upload flow is platform-independent; only reading the cookie out of the brow
 2. Validates the session, then drives GitHub's own upload flow: fetch the repo page for an upload token, request an upload policy, `POST` the file to the returned signed storage URL, and confirm the asset.
 
 This is a clean-room reimplementation of what the GitHub web UI does when you drag an image into a comment box — there is no public API for it.
+
+## For agents
+
+`gh-img` is built to be driven by a coding agent, and ships the pieces for it:
+
+- [`AGENTS.md`](AGENTS.md) — usage notes an agent picks up automatically.
+- [`skills/pr-screenshot`](skills/pr-screenshot) — a Claude Code skill that uploads image(s) and embeds them in the current PR (description or a comment). Install it with:
+
+  ```sh
+  cp -r skills/pr-screenshot ~/.claude/skills/
+  ```
+
+The agent runs `gh img <file>`, gets one `![](…)` line, and drops it into the PR.
 
 ## Security
 

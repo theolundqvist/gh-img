@@ -10,7 +10,7 @@
 
 ## When to reach for it
 
-Any PR where a screenshot beats prose — especially **frontend / desktop UI changes**. Capture the changed states (drive the app headless via the project's own run/verify path), then `gh img` them and edit the markdown into the PR body. Show before/after for visual changes.
+Any PR where a screenshot beats prose — especially **frontend / desktop UI changes**. Capture the changed states (drive the app headless via the project's own run/verify path), then `gh img` them and edit the markdown into the PR body. Show before/after for visual changes. The [`pr-screenshot`](skills/pr-screenshot) skill wraps this end-to-end.
 
 ## Constraints
 
