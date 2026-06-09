@@ -17,12 +17,6 @@ Because GitHub asset URLs inherit the repository's visibility, an image uploaded
 - **Private by default.** Images inherit repo visibility; a private repo's screenshots 404 for anyone without access.
 - **No unscoped cookie handed to a third party.** A clean-room reimplementation of the browser upload flow, so you aren't trusting someone else's package with a full-account session cookie.
 
-## Demo
-
-The image below was uploaded to this repo by `gh-img` itself and embedded by its `user-attachments` URL:
-
-![demo.png](https://github.com/user-attachments/assets/987c50cf-05bd-49b8-aa54-2224dd7b74d1)
-
 ## Install
 
 As a `gh` extension (recommended):
