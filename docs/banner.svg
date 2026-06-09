@@ -1,0 +1,73 @@
+<svg width="1200" height="460" viewBox="0 0 1200 460" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d1117"/>
+      <stop offset="1" stop-color="#090c14"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0.12" cy="0.05" r="0.7">
+      <stop offset="0" stop-color="#7c5cff" stop-opacity="0.40"/>
+      <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0.95" cy="1.0" r="0.7">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#a78bfa"/>
+      <stop offset="0.5" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#000" flood-opacity="0.55"/>
+    </filter>
+    <style>
+      .mono { font-family: ui-monospace, 'SF Mono', 'Menlo', monospace; }
+      .sans { font-family: ui-sans-serif, -apple-system, system-ui, 'Helvetica Neue', sans-serif; }
+    </style>
+  </defs>
+
+  <rect width="1200" height="460" fill="url(#bg)"/>
+  <rect width="1200" height="460" fill="url(#glowA)"/>
+  <rect width="1200" height="460" fill="url(#glowB)"/>
+
+  <!-- wordmark -->
+  <text x="78" y="146" class="mono" font-size="96" font-weight="700" fill="#ffffff">gh<tspan fill="url(#accent)">-img</tspan></text>
+  <text x="84" y="196" class="sans" font-size="29" fill="#aeb8c6">inline images in PRs — made for coding agents</text>
+  <rect x="84" y="214" width="446" height="4" rx="2" fill="url(#accent)"/>
+
+  <!-- pills -->
+  <g class="sans" font-size="18">
+    <rect x="84" y="244" width="190" height="40" rx="20" fill="#161b22" stroke="#30363d"/>
+    <text x="106" y="270" fill="#7ee787">zero dependencies</text>
+    <rect x="288" y="244" width="186" height="40" rx="20" fill="#161b22" stroke="#30363d"/>
+    <text x="310" y="270" fill="#a5b4fc">private by default</text>
+    <rect x="488" y="244" width="150" height="40" rx="20" fill="#161b22" stroke="#30363d"/>
+    <text x="510" y="270" fill="#67e8f9">macOS · MIT</text>
+  </g>
+
+  <!-- flow: terminal -> arrow -> PR card -->
+  <!-- terminal -->
+  <g filter="url(#soft)">
+    <rect x="84" y="322" width="386" height="104" rx="14" fill="#0f1420" stroke="#2a3140"/>
+  </g>
+  <circle cx="110" cy="346" r="5" fill="#ff5f56"/>
+  <circle cx="128" cy="346" r="5" fill="#ffbd2e"/>
+  <circle cx="146" cy="346" r="5" fill="#27c93f"/>
+  <text x="104" y="386" class="mono" font-size="21" fill="#c9d1d9">$ <tspan fill="#7ee787">gh</tspan> img shot.png</text>
+  <text x="104" y="412" class="mono" font-size="18" fill="#8b949e">→ ![shot.png](…)</text>
+
+  <!-- arrow -->
+  <path d="M486 374 h66" stroke="url(#accent)" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M548 364 l14 10 l-14 10" stroke="url(#accent)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+
+  <!-- PR card -->
+  <g filter="url(#soft)">
+    <rect x="582" y="316" width="534" height="116" rx="14" fill="#0f1420" stroke="#2a3140"/>
+  </g>
+  <rect x="602" y="336" width="150" height="76" rx="8" fill="url(#accent)"/>
+  <path d="M602 396 l34 -26 l28 20 l34 -28 l54 40 v6 a8 8 0 0 1 -8 8 h-188 a8 8 0 0 1 -8 -8 z" fill="#0f1420" opacity="0.30"/>
+  <circle cx="640" cy="362" r="10" fill="#ffffff" opacity="0.85"/>
+  <text x="776" y="360" class="sans" font-size="21" font-weight="600" fill="#e6edf3">Pull request</text>
+  <text x="776" y="388" class="sans" font-size="17" fill="#9aa4b2">screenshot attached inline,</text>
+  <text x="776" y="410" class="sans" font-size="17" fill="#9aa4b2">private to the repo</text>
+</svg>

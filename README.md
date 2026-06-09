@@ -1,12 +1,21 @@
 # gh-img
 
+![gh-img — inline images in PRs, made for coding agents](docs/banner.png)
+
 [![ci](https://github.com/theolundqvist/gh-img/actions/workflows/ci.yml/badge.svg)](https://github.com/theolundqvist/gh-img/actions/workflows/ci.yml)
+[![dependencies: 0](https://img.shields.io/badge/dependencies-0-brightgreen)](go.mod)
 [![Go Reference](https://pkg.go.dev/badge/github.com/theolundqvist/gh-img.svg)](https://pkg.go.dev/github.com/theolundqvist/gh-img)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-Upload local images to GitHub from the command line and get back a `user-attachments` markdown URL. Because GitHub asset URLs inherit the repository's visibility, an image uploaded against a private repo **stays private** — it renders inline for anyone signed in with repo access and 404s for everyone else.
+**Made for coding agents.** Lets an AI agent (Claude Code, Cursor, and friends) paste images and screenshots straight into GitHub **PR descriptions and comments** — no human drag-drop. The agent runs `gh img screenshot.png`, gets back a `![](…)` markdown line, and drops it into the PR.
 
-No third-party dependencies: pure Go standard library plus the macOS `security` and `sqlite3` binaries that already ship with the OS. It reads your existing GitHub browser session — no token to provision for everyday local use.
+Because GitHub asset URLs inherit the repository's visibility, an image uploaded against a private repo **stays private** — it renders inline for anyone with repo access and 404s for everyone else.
+
+- **Made for agents.** Ships with an [`AGENTS.md`](AGENTS.md) and a Claude Code skill; the output is one markdown line ready to paste into a PR body or comment.
+- **Zero third-party dependencies.** Pure Go standard library — `go.mod` has no `require` block. The only externals are the macOS `security` and `sqlite3` binaries that already ship with the OS.
+- **Safe and easily verifiable.** A few hundred lines you can read end-to-end in one sitting. The session cookie is used only against `github.com` and GitHub's own upload storage — never written to disk, never logged, never sent anywhere else.
+- **Private by default.** Images inherit repo visibility; a private repo's screenshots 404 for anyone without access.
+- **No unscoped cookie handed to a third party.** A clean-room reimplementation of the browser upload flow, so you aren't trusting someone else's package with a full-account session cookie.
 
 ## Demo
 
