@@ -4,6 +4,12 @@ Upload local images to GitHub and get back `user-attachments` markdown URLs. Bec
 
 macOS only (cookie decryption requires the macOS Keychain).
 
+## Demo
+
+The image below was uploaded to this private repo by `gh-img` itself and embedded by its `user-attachments` URL. It renders inline for anyone signed in with repo access, and 404s for everyone else:
+
+![demo.png](https://github.com/user-attachments/assets/987c50cf-05bd-49b8-aa54-2224dd7b74d1)
+
 ## Install
 
 ```sh
