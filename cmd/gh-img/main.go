@@ -4,11 +4,22 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	ghimg "github.com/theolundqvist/gh-img"
 )
 
 var version = "dev"
+
+func resolveVersion() string {
+	if version != "dev" {
+		return version
+	}
+	if bi, ok := debug.ReadBuildInfo(); ok && bi.Main.Version != "" && bi.Main.Version != "(devel)" {
+		return bi.Main.Version
+	}
+	return version
+}
 
 func main() {
 	var (
@@ -22,7 +33,7 @@ func main() {
 	flag.Parse()
 
 	if showVer {
-		fmt.Println(version)
+		fmt.Println(resolveVersion())
 		return
 	}
 
