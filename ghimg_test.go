@@ -36,9 +36,8 @@ func TestDecryptCookie_RoundTrip(t *testing.T) {
 	for _, ver := range []int{23, 24} {
 		plainInput := []byte(want)
 		if ver >= 24 {
-			// prefix with 32-byte SHA256 domain hash placeholder
-			prefix := bytes.Repeat([]byte{0x42}, 32)
-			plainInput = append(prefix, []byte(want)...)
+			plainInput = bytes.Repeat([]byte{0x42}, 32)
+			plainInput = append(plainInput, []byte(want)...)
 		}
 
 		blob := encryptForTest(plainInput, password, ver)

@@ -1,0 +1,22 @@
+run:
+  timeout: 3m
+
+linters:
+  enable:
+    - gofumpt
+    - misspell
+    - unconvert
+    - gocritic
+    - gosec
+
+linters-settings:
+  gosec:
+    # G204 (subprocess with variable args) and G304 (file path as input) are
+    # inherent to this tool: it runs security/sqlite3/git/gh with controlled
+    # args and reads user-named image files and browser cookie databases.
+    # G505 (crypto/sha1): SHA-1 is not our choice — Chromium's cookie encryption
+    # is PBKDF2-HMAC-SHA1, and we must match it to decrypt the cookie.
+    excludes:
+      - G204
+      - G304
+      - G505

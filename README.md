@@ -1,5 +1,9 @@
 # gh-img
 
+[![ci](https://github.com/theolundqvist/gh-img/actions/workflows/ci.yml/badge.svg)](https://github.com/theolundqvist/gh-img/actions/workflows/ci.yml)
+[![Go Reference](https://pkg.go.dev/badge/github.com/theolundqvist/gh-img.svg)](https://pkg.go.dev/github.com/theolundqvist/gh-img)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 Upload local images to GitHub from the command line and get back a `user-attachments` markdown URL. Because GitHub asset URLs inherit the repository's visibility, an image uploaded against a private repo **stays private** — it renders inline for anyone signed in with repo access and 404s for everyone else.
 
 No third-party dependencies: pure Go standard library plus the macOS `security` and `sqlite3` binaries that already ship with the OS. It reads your existing GitHub browser session — no token to provision for everyday local use.
@@ -86,6 +90,14 @@ On shared or CI machines, supply the token explicitly via `--token` or `GH_SESSI
 - Browser cookie reading is macOS + Chromium-family only. Firefox and Safari are not supported (use `--token`).
 - Uses an undocumented GitHub upload endpoint; if GitHub changes it, the tool will need updating.
 - Requires write access to the target repo (GitHub scopes the upload token to repos you can push to).
+
+## Troubleshooting
+
+- **macOS Keychain prompt on first run** — expected. macOS is asking permission to read the browser's cookie-encryption key. Click Allow.
+- **`no valid GitHub session found`** — you're not logged into GitHub in a supported browser, or the cookie expired. Log in again, or pass `--token`.
+- **`uploadToken not found ... SAML SSO`** — the org enforces SAML and your browser session isn't SSO-authorized. Authorize at `https://github.com/orgs/<org>/sso` (lasts ~24h), then retry. Write access alone isn't enough.
+- **`fetch repo page: HTTP 404`** — you lack access to that repo, or `--repo owner/name` is wrong.
+- **Firefox / Safari / Linux / Windows** — browser reading is unsupported; pass `--token <user_session>` or set `GH_SESSION_TOKEN`.
 
 ## License
 
