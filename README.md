@@ -56,6 +56,20 @@ gh img --token <user_session value> --repo owner/repo screenshot.png
 GH_SESSION_TOKEN=<value> gh img --repo owner/repo screenshot.png
 ```
 
+### Downloading assets
+
+`gh img get <url>` downloads a GitHub asset that no API or token can fetch — a private repo's `user-attachments` image, a `private-user-images` URL — using the same browser session. Bytes go to stdout by default, or to a file with `-o`:
+
+```sh
+# private user-attachments image → file
+gh img get https://github.com/user-attachments/assets/... -o out.png
+
+# raw bytes to stdout (pipe it somewhere)
+gh img get https://github.com/user-attachments/assets/... > out.png
+```
+
+Only `github.com` and `private-user-images.githubusercontent.com` URLs are accepted; the session cookie is stripped on any redirect that leaves `github.com`, so the signed storage URL an asset redirects to never sees it.
+
 Each upload prints one markdown line to stdout:
 
 ```
@@ -68,10 +82,10 @@ Errors go to stderr. With multiple images, `gh-img` continues on failure and exi
 
 | Path | macOS | Linux / Windows |
 |---|---|---|
-| Read session from browser | ✅ Arc, Chrome, Brave, Edge, Chromium | ❌ |
+| Read session from browser | ✅ Arc, Chrome, Brave, Edge, Chromium, Dia | ❌ |
 | `--token` / `GH_SESSION_TOKEN` | ✅ | ✅ |
 
-The upload flow is platform-independent; only reading the cookie out of the browser is macOS-only (it relies on the macOS Keychain). On Linux/Windows, pass the token explicitly.
+The upload and download flows are platform-independent; only reading the cookie out of the browser is macOS-only (it relies on the macOS Keychain). On Linux/Windows, pass the token explicitly.
 
 ## How it works
 

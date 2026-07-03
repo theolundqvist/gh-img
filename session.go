@@ -66,5 +66,5 @@ func SessionToken(tokenFlag string) (string, string, error) {
 			return tok, "browser", nil
 		}
 	}
-	return "", "", fmt.Errorf("no valid GitHub session found in Arc/Chrome/Brave/Edge/Chromium — are you logged in?")
+	return "", "", fmt.Errorf("no valid GitHub session found in Arc/Chrome/Brave/Edge/Chromium/Dia — are you logged in?")
 }

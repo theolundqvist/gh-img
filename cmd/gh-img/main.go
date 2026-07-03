@@ -3,8 +3,10 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io"
 	"os"
 	"runtime/debug"
+	"strings"
 
 	ghimg "github.com/theolundqvist/gh-img"
 )
@@ -22,6 +24,11 @@ func resolveVersion() string {
 }
 
 func main() {
+	if len(os.Args) > 1 && os.Args[1] == "get" {
+		runGet(os.Args[2:])
+		return
+	}
+
 	var (
 		repoSpec string
 		token    string
@@ -73,6 +80,64 @@ func main() {
 	}
 
 	if failed {
+		os.Exit(1)
+	}
+}
+
+// flagsFirst reorders flags ahead of the positional URL so `get <url> -o f` parses.
+func flagsFirst(args []string) []string {
+	valueFlag := map[string]bool{"-o": true, "--o": true, "-token": true, "--token": true}
+	var flags, positional []string
+	for i := 0; i < len(args); i++ {
+		a := args[i]
+		if strings.HasPrefix(a, "-") {
+			flags = append(flags, a)
+			if valueFlag[a] && i+1 < len(args) {
+				i++
+				flags = append(flags, args[i])
+			}
+			continue
+		}
+		positional = append(positional, a)
+	}
+	return append(flags, positional...)
+}
+
+func runGet(args []string) {
+	fs := flag.NewFlagSet("get", flag.ExitOnError)
+	var (
+		token string
+		out   string
+	)
+	fs.StringVar(&token, "token", "", "GitHub user_session token (overrides env and browser)")
+	fs.StringVar(&out, "o", "", "write to file instead of stdout")
+	_ = fs.Parse(flagsFirst(args))
+
+	rest := fs.Args()
+	if len(rest) != 1 {
+		fmt.Fprintln(os.Stderr, "usage: gh-img get [--token <v>] [-o <file>] <url>")
+		os.Exit(1)
+	}
+
+	tok, _, err := ghimg.SessionToken(token)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
+		os.Exit(1)
+	}
+
+	w := io.Writer(os.Stdout)
+	if out != "" {
+		f, err := os.Create(out)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "error:", err)
+			os.Exit(1)
+		}
+		defer f.Close()
+		w = f
+	}
+
+	if err := ghimg.Download(rest[0], tok, w); err != nil {
+		fmt.Fprintln(os.Stderr, "error:", err)
 		os.Exit(1)
 	}
 }

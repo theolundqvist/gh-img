@@ -5,6 +5,7 @@ import (
 	"crypto/aes"
 	"crypto/cipher"
 	"encoding/hex"
+	"net/http"
 	"strings"
 	"testing"
 )
@@ -72,6 +73,65 @@ func TestDecryptCookie_TooShort(t *testing.T) {
 	_, err := decryptCookie([]byte("v10"), []byte("pw"), 23)
 	if err == nil {
 		t.Fatal("expected error for too-short input")
+	}
+}
+
+// --- get: URL validation ---
+
+func TestValidateGetURL_Allowed(t *testing.T) {
+	for _, u := range []string{
+		"https://github.com/user-attachments/assets/abc-123",
+		"https://private-user-images.githubusercontent.com/1/2?jwt=x",
+	} {
+		if _, err := validateGetURL(u); err != nil {
+			t.Fatalf("expected %q allowed, got %v", u, err)
+		}
+	}
+}
+
+func TestValidateGetURL_Rejected(t *testing.T) {
+	for _, u := range []string{
+		"https://evil.com/user-attachments/assets/abc",
+		"https://raw.githubusercontent.com/o/r/main/x.png",
+		"http://github.com/user-attachments/assets/abc",
+		"https://github.com.evil.com/x",
+		"https://github.com@evil.com/user-attachments/assets/abc",
+		"https://github.com:8443/user-attachments/assets/abc",
+	} {
+		if _, err := validateGetURL(u); err == nil {
+			t.Fatalf("expected %q rejected, got nil error", u)
+		}
+	}
+}
+
+// --- get: redirect cookie stripping ---
+
+func TestStripCookieLeavingGitHub(t *testing.T) {
+	cases := []struct {
+		host string
+		kept bool
+	}{
+		{"github.com", true},
+		{"objects.githubusercontent.com", false},
+		{"private-user-images.githubusercontent.com", false},
+	}
+	for _, c := range cases {
+		req, _ := http.NewRequest("GET", "https://"+c.host+"/x", nil)
+		req.Header.Set("Cookie", "user_session=secret")
+		if err := stripCookieLeavingGitHub(req, nil); err != nil {
+			t.Fatalf("%s: unexpected error %v", c.host, err)
+		}
+		got := req.Header.Get("Cookie") != ""
+		if got != c.kept {
+			t.Fatalf("%s: cookie kept=%v, want %v", c.host, got, c.kept)
+		}
+	}
+}
+
+func TestStripCookieLeavingGitHub_RedirectLimit(t *testing.T) {
+	req, _ := http.NewRequest("GET", "https://github.com/x", nil)
+	if err := stripCookieLeavingGitHub(req, make([]*http.Request, 10)); err == nil {
+		t.Fatal("expected error after 10 redirects")
 	}
 }
 

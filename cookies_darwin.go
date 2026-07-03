@@ -24,6 +24,7 @@ var browsers = []browser{
 	{"BraveSoftware/Brave-Browser", "Brave"},
 	{"Microsoft Edge", "Microsoft Edge"},
 	{"Chromium", "Chromium"},
+	{"Dia/User Data", "Dia"},
 }
 
 func keychainPassword(account string) ([]byte, error) {
@@ -181,7 +182,7 @@ func browserCandidates() ([]string, error) {
 		}
 	}
 	if len(candidates) == 0 {
-		msg := "no valid GitHub session found in Arc/Chrome/Brave/Edge/Chromium — are you logged in?"
+		msg := "no valid GitHub session found in Arc/Chrome/Brave/Edge/Chromium/Dia — are you logged in?"
 		if len(errs) > 0 {
 			msg += "\n" + strings.Join(errs, "\n")
 		}
