@@ -56,6 +56,8 @@ gh img --token <user_session value> --repo owner/repo screenshot.png
 GH_SESSION_TOKEN=<value> gh img --repo owner/repo screenshot.png
 ```
 
+On macOS, set `GH_IMG_BROWSER=Dia` to read only that browser's session instead of the first valid session found across browsers. This is useful when only one browser has authorized your organization's SSO. Explicit tokens still take precedence.
+
 ### Downloading assets
 
 `gh img get <url>` downloads a GitHub asset that no API or token can fetch — a private repo's `user-attachments` image, a `private-user-images` URL — using the same browser session. Bytes go to stdout by default, or to a file with `-o`:
