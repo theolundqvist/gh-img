@@ -127,7 +127,7 @@ On shared or CI machines, supply the token explicitly via `--token` or `GH_SESSI
 
 - **macOS Keychain prompt on first run** — expected. macOS is asking permission to read the browser's cookie-encryption key. Click Allow.
 - **`no valid GitHub session found`** — you're not logged into GitHub in a supported browser, or the cookie expired. Log in again, or pass `--token`.
-- **`uploadToken not found ... SAML SSO`** — the org enforces SAML and your browser session isn't SSO-authorized. Authorize at `https://github.com/orgs/<org>/sso` (lasts ~24h), then retry. Write access alone isn't enough.
+- **`uploadToken not found ... SAML SSO` / `returned an HTML page instead of an asset`** — authorize at `https://github.com/orgs/<org>/sso`, then select that browser with `GH_IMG_BROWSER` if you use several. Downloads reject sign-in pages rather than saving them as assets.
 - **`fetch repo page: HTTP 404`** — you lack access to that repo, or `--repo owner/name` is wrong.
 - **Firefox / Safari / Linux / Windows** — browser reading is unsupported; pass `--token <user_session>` or set `GH_SESSION_TOKEN`.
 
