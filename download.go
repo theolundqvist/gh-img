@@ -3,6 +3,7 @@ package ghimg
 import (
 	"fmt"
 	"io"
+	"mime"
 	"net/http"
 	"net/url"
 	"time"
@@ -64,6 +65,10 @@ func Download(rawURL, token string, w io.Writer) error {
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("GET %s: HTTP %d", rawURL, resp.StatusCode)
+	}
+	mediaType, _, _ := mime.ParseMediaType(resp.Header.Get("Content-Type"))
+	if mediaType == "text/html" || mediaType == "application/xhtml+xml" {
+		return fmt.Errorf("GET %s returned an HTML page instead of an asset; authorize the selected browser's GitHub SSO session", rawURL)
 	}
 	if _, err := io.Copy(w, resp.Body); err != nil {
 		return fmt.Errorf("write asset: %w", err)

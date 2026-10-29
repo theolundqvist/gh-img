@@ -25,8 +25,7 @@ func resolveVersion() string {
 
 func main() {
 	if len(os.Args) > 1 && os.Args[1] == "get" {
-		runGet(os.Args[2:])
-		return
+		os.Exit(runGet(os.Args[2:]))
 	}
 
 	var (
@@ -103,7 +102,7 @@ func flagsFirst(args []string) []string {
 	return append(flags, positional...)
 }
 
-func runGet(args []string) {
+func runGet(args []string) int {
 	fs := flag.NewFlagSet("get", flag.ExitOnError)
 	var (
 		token string
@@ -116,13 +115,13 @@ func runGet(args []string) {
 	rest := fs.Args()
 	if len(rest) != 1 {
 		fmt.Fprintln(os.Stderr, "usage: gh-img get [--token <v>] [-o <file>] <url>")
-		os.Exit(1)
+		return 1
 	}
 
 	tok, _, err := ghimg.SessionToken(token)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
-		os.Exit(1)
+		return 1
 	}
 
 	w := io.Writer(os.Stdout)
@@ -130,7 +129,7 @@ func runGet(args []string) {
 		f, err := os.Create(out)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "error:", err)
-			os.Exit(1)
+			return 1
 		}
 		defer f.Close()
 		w = f
@@ -138,6 +137,7 @@ func runGet(args []string) {
 
 	if err := ghimg.Download(rest[0], tok, w); err != nil {
 		fmt.Fprintln(os.Stderr, "error:", err)
-		os.Exit(1)
+		return 1
 	}
+	return 0
 }

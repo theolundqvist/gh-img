@@ -143,6 +143,9 @@ func browserCandidates() ([]string, error) {
 	var errs []string
 
 	for _, b := range browsers {
+		if selected := os.Getenv("GH_IMG_BROWSER"); selected != "" && !strings.EqualFold(selected, b.account) {
+			continue
+		}
 		files := cookieFiles(b.supportDir)
 		if len(files) == 0 {
 			continue
